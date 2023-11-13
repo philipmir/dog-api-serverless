@@ -1,34 +1,18 @@
-const {sendResponse} = require('../../responses/index');
+const AWS = require('aws-sdk');
+const { sendResponse } = require('../../responses');
+const db = new AWS.DynamoDB.DocumentClient();
 
-var dogs = [
-    {
-        id: 5762364,
-        breed: "Golden Retriever",
-        age: 3,
-        color: "Golden",
-        weight_kg: 30
-    },
-    {
-        id: 9320475,
-        breed: "Siberian Husky",
-        age: 4,
-        color: "Black and White",
-        weight_kg: 25
-    },
-    {
-        id: 450968,
-        breed: "Labrador Retriever",
-        age: 2,
-        color: "Black",
-        weight_kg: 28
-    }
-];
+
 
     
 
 exports.handler = async (event, context) => {
 
-    return sendResponse(200, dogs);
+    const {Items} = await db.scan({
+        TableName: 'dogs-db'
+    }).promise();
+
+    return sendResponse (200, {success : true, dogs : Items});
 
 
 }
