@@ -28,6 +28,31 @@ functions:
       - httpApi:
           path: "/dogs"
           method: POST        
+  signUp:
+    handler: functions/signUp/index.handler
+    events:
+      - httpApi:
+          path: "/auth/signup"
+          method: POST   
+  login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: "/auth/login"
+          method: POST
+  deleteDog:
+    handler: functions/deleteDog/index.handler
+    events:
+      - httpApi:
+          path: '/dogs/{dogId}'
+          method: DELETE
+  updateDog:
+    handler: functions/updateDog/index.handler
+    events:
+      - httpApi:
+          path: '/dogs/{dogId}'
+          method: PATCH
+
 
 
 
@@ -42,6 +67,18 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    usersDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: accounts
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
     
